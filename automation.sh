@@ -68,4 +68,41 @@ tar -cvf /tmp/$name-httpd-logs-$time.tar -P /var/log/apache2/*.log
 #Synchronize the logs to the S3 bucket
 aws s3 cp /tmp/$name-httpd-logs-$time.tar s3://$s3BucketName/$name-httpd-logs-$time.tar
 
+#********************************************************************************
+
+#********************************************************************************
+# Book keeping the file commits to the S3 bucket
+#********************************************************************************
+
+# Checking whether the inventory.html file is present. Else, create the file with the header.
+if test -e /var/www/html/inventory.html
+then
+	echo "Inventory.html file exists"
+else
+	echo "Log Type	Date Created	File type	File Size" > /var/www/html/inventory.html
+fi
+
+# This block gets the file size of the TAR file created which needs to be added in the inventory.html file.
+ls -lh /tmp/$name-httpd-logs-$time.tar > /tmp/fileSize.txt
+
+size=$(awk '{print $5}' /tmp/fileSize.txt)
+
+echo "httpd-logs 	$time		TAR	$size" >> /var/www/html/inventory.html
+
+#********************************************************************************
+
+#********************************************************************************
+# Scheduling a cron job to run the automation.sh file as a root user every minute
+#********************************************************************************
+
+# Check whether cron job is set in /etc/cron.d and set the cron job is not set to run every one hour
+if test  -e /etc/cron.d/automation
+then
+	echo "Cron job set already"
+else
+	# the redirection operation will  save the cron job log to the "cronJobLog.txt" file
+	# with the STDOUT and STDERR output data
+	echo "* * * * * root /root/Automation_Project/automation.sh > /root/cronJobLog.txt 2>&1"
+fi
+
 #***************** Scipt completed **************
