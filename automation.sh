@@ -92,7 +92,7 @@ echo "httpd-logs 	$time		TAR	$size" >> /var/www/html/inventory.html
 #********************************************************************************
 
 #********************************************************************************
-# Scheduling a cron job to run the automation.sh file as a root user every minute
+# Scheduling a cron job to run the automation.sh file as a root user daily at midnight
 #********************************************************************************
 
 # Check whether cron job is set in /etc/cron.d and set the cron job is not set to run every one hour
