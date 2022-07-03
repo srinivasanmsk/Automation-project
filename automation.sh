@@ -102,7 +102,7 @@ then
 else
 	# the redirection operation will  save the cron job log to the "cronJobLog.txt" file
 	# with the STDOUT and STDERR output data
-	echo "* * * * * root /root/Automation_Project/automation.sh > /root/cronJobLog.txt 2>&1"
+	echo "0 0 * * * root /root/Automation_Project/automation.sh > /root/cronJobLog.txt 2>&1"
 fi
 
 #***************** Scipt completed **************
